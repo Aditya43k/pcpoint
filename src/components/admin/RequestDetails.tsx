@@ -1,14 +1,14 @@
-import type { ServiceRequest, Technician } from '@/lib/types';
+import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { User, Mail, Laptop, Smartphone, Monitor, Tablet, HelpCircle, Server, MessageSquare, AlertCircle } from 'lucide-react';
 import { TechnicianAssignment } from './TechnicianAssignment';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 type RequestDetailsProps = {
   request: ServiceRequest;
-  technicians: Technician[];
 };
 
 const deviceIcons = {
@@ -20,7 +20,7 @@ const deviceIcons = {
   Other: <HelpCircle className="h-5 w-5 text-muted-foreground" />,
 };
 
-export function RequestDetails({ request, technicians }: RequestDetailsProps) {
+export function RequestDetails({ request }: RequestDetailsProps) {
   const getStatusClass = (status: ServiceRequest['status']) => {
     switch (status) {
       case 'Pending': return 'bg-yellow-500';
@@ -85,7 +85,7 @@ export function RequestDetails({ request, technicians }: RequestDetailsProps) {
           </div>
         </div>
         <Separator />
-        <TechnicianAssignment request={request} technicians={technicians} />
+        <TechnicianAssignment request={request} />
       </CardContent>
     </Card>
   );

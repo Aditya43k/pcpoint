@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Wrench, ShieldCheck, Clock, BrainCircuit } from "lucide-react";
+import { Wrench, ShieldCheck, Clock } from "lucide-react";
 
 const features = [
   {
@@ -17,11 +17,6 @@ const features = [
     title: "Real-time Progress Updates",
     description: "Stay informed with live updates on your service request, from diagnosis to completion.",
   },
-  {
-    icon: <BrainCircuit className="h-8 w-8 text-primary" />,
-    title: "AI-Powered Assignments",
-    description: "Our smart system assigns the best technician for your specific issue, ensuring a faster and more accurate resolution.",
-  },
 ];
 
 export function Features() {
@@ -36,7 +31,7 @@ export function Features() {
             We've built our service around efficiency, expertise, and transparency.
           </p>
         </div>
-        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <Card key={feature.title} className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>

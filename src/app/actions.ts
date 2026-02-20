@@ -1,9 +1,6 @@
 'use server';
 
 import { z } from 'zod';
-import { suggestTechnicianAssignment } from '@/ai/flows/suggest-technician-assignment';
-import type { ServiceRequest, Technician } from '@/lib/types';
-import { mockTechnicians } from './lib/data';
 
 const formSchema = z.object({
   customerName: z.string().min(2),
@@ -35,29 +32,4 @@ export async function submitServiceRequest(formData: unknown) {
     success: true,
     requestId,
   };
-}
-
-export async function getAiTechnicianSuggestion(request: ServiceRequest) {
-  if (!request) {
-    return { success: false, error: 'Service request not found.' };
-  }
-
-  try {
-    const aiInput = {
-      serviceRequest: {
-        deviceType: request.deviceType,
-        issueDescription: request.issueDescription,
-        osVersion: request.osVersion,
-        errorMessages: request.errorMessages,
-      },
-      availableTechnicians: mockTechnicians,
-    };
-
-    const result = await suggestTechnicianAssignment(aiInput);
-    
-    return { success: true, suggestion: result.suggestedTechnician };
-  } catch (error) {
-    console.error('AI suggestion failed:', error);
-    return { success: false, error: 'Failed to get AI suggestion.' };
-  }
 }

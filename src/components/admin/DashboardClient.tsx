@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { ServiceRequest, Technician } from '@/lib/types';
+import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -10,10 +10,9 @@ import { RequestDetails } from './RequestDetails';
 
 type DashboardClientProps = {
   initialRequests: ServiceRequest[];
-  technicians: Technician[];
 };
 
-export function DashboardClient({ initialRequests, technicians }: DashboardClientProps) {
+export function DashboardClient({ initialRequests }: DashboardClientProps) {
   const [requests, setRequests] = useState<ServiceRequest[]>(initialRequests);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(requests[0]?.id || null);
 
@@ -75,7 +74,6 @@ export function DashboardClient({ initialRequests, technicians }: DashboardClien
           <RequestDetails
             key={selectedRequest.id} // Re-mount component on selection change
             request={selectedRequest}
-            technicians={technicians}
           />
         ) : (
           <Card className="flex h-full min-h-[300px] items-center justify-center">

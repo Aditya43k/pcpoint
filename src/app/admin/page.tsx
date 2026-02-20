@@ -1,12 +1,11 @@
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { DashboardClient } from "@/components/admin/DashboardClient";
-import { mockServiceRequests, mockTechnicians } from "@/lib/data";
+import { mockServiceRequests } from "@/lib/data";
 
 export default function AdminPage() {
   // In a real app, you would fetch this data from your database.
   const requests = mockServiceRequests;
-  const technicians = mockTechnicians;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -16,7 +15,7 @@ export default function AdminPage() {
           <h1 className="text-3xl font-bold tracking-tight font-headline">Admin Dashboard</h1>
           <p className="text-muted-foreground">Manage service requests and technician assignments.</p>
         </div>
-        <DashboardClient initialRequests={requests} technicians={technicians} />
+        <DashboardClient initialRequests={requests} />
       </main>
       <Footer />
     </div>
