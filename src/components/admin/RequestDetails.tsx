@@ -2,7 +2,7 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks } from 'lucide-react';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck } from 'lucide-react';
 import { TechnicianAssignment } from './TechnicianAssignment';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -29,6 +29,8 @@ export function RequestDetails({ request }: RequestDetailsProps) {
       default: return 'bg-gray-500';
     }
   };
+  
+  const isAntivirusRequest = request.deviceType === 'Software' && request.brand === 'Anti-virus & Security';
 
   return (
     <Card className="shadow-md">
@@ -67,10 +69,17 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               }
               <span>{request.brand}</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs bg-muted p-1 rounded">OS</span>
-              <span>{request.osVersion}</span>
-            </div>
+            {isAntivirusRequest ? (
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+                <span>{request.osVersion}</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs bg-muted p-1 rounded">OS</span>
+                <span>{request.osVersion}</span>
+              </div>
+            )}
           </div>
         </div>
         <Separator />

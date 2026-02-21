@@ -36,12 +36,14 @@ const deviceBrands: Record<string, string[]> = {
   Software: ['OS Installation', 'Anti-virus & Security', 'Data Recovery', 'Other'],
 };
 
+const antivirusBrands: string[] = ['McAfee', 'NPAV', 'Quick Heal', 'Kaspersky', 'Bitdefender', 'Other'];
+
 const formSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   customerEmail: z.string().email({ message: 'Please enter a valid email address.' }),
   deviceType: z.enum(['Laptop', 'Desktop', 'Printer', 'Software']),
   brand: z.string({ required_error: 'Please select an option.' }).min(1, { message: 'Please select an option.' }),
-  osVersion: z.string().min(2, { message: 'OS version is required.' }),
+  osVersion: z.string().min(2, { message: 'This field is required.' }),
   issueDescription: z.string().min(20, { message: 'Please provide a detailed description of at least 20 characters.' }),
   errorMessages: z.string().optional(),
 });
@@ -64,15 +66,26 @@ export function ServiceRequestForm() {
   });
 
   const deviceType = form.watch('deviceType');
+  const brand = form.watch('brand');
   const brands = deviceType ? deviceBrands[deviceType] : [];
   const brandLabel = deviceType === 'Software' ? 'Service Type' : 'Brand';
   const brandPlaceholder = deviceType === 'Software' ? 'Select a service' : 'Select a brand';
+  
+  const isAntivirusRequest = deviceType === 'Software' && brand === 'Anti-virus & Security';
 
   useEffect(() => {
     if (deviceType) {
       form.resetField('brand', { defaultValue: '' });
     }
   }, [deviceType, form]);
+
+  useEffect(() => {
+    // When brand (service type) changes for software, reset the osVersion field
+    // as it might be holding an antivirus brand, and the new service might need an OS version.
+    if (deviceType === 'Software') {
+      form.resetField('osVersion', { defaultValue: '' });
+    }
+  }, [brand, deviceType, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -177,19 +190,47 @@ export function ServiceRequestForm() {
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="osVersion"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Operating System & Version</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Windows 11, macOS Sonoma, N/A" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {isAntivirusRequest ? (
+            <FormField
+              control={form.control}
+              name="osVersion"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Antivirus Brand</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value || ''}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an antivirus brand" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {antivirusBrands.map((avBrand) => (
+                        <SelectItem key={avBrand} value={avBrand}>{avBrand}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select 'Other' if your brand is not listed and specify it in the description below.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : (
+             <FormField
+                control={form.control}
+                name="osVersion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Operating System &amp; Version</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Windows 11, macOS Sonoma, N/A" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+          )}
 
           <FormField
             control={form.control}
