@@ -27,9 +27,7 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="pr-0">
-                <Link href="/" className="mb-6 flex items-center">
-                  <Logo />
-                </Link>
+                <Logo className="mb-6" />
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
                     <Link
