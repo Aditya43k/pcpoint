@@ -3,6 +3,7 @@ export type ServiceRequest = {
   customerName: string;
   customerEmail: string;
   deviceType: 'Laptop' | 'Desktop' | 'Printer';
+  brand: string;
   osVersion: string;
   issueDescription: string;
   errorMessages?: string;

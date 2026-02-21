@@ -26,13 +26,20 @@ import { CardContent, CardFooter } from '@/components/ui/card';
 import { submitServiceRequest } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
+
+const deviceBrands: Record<string, string[]> = {
+  Laptop: ['HP', 'Acer', 'Dell', 'Asus', 'Lenovo', 'Apple', 'MSI', 'Razer', 'Samsung', 'Microsoft', 'Other'],
+  Desktop: ['Dell', 'HP', 'Apple', 'Lenovo', 'Acer', 'Custom Build', 'Other'],
+  Printer: ['HP', 'Canon', 'Epson', 'Brother', 'Xerox', 'Lexmark', 'Samsung', 'Other'],
+};
 
 const formSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   customerEmail: z.string().email({ message: 'Please enter a valid email address.' }),
   deviceType: z.enum(['Laptop', 'Desktop', 'Printer']),
+  brand: z.string({ required_error: 'Please select a brand.' }).min(1, { message: 'Please select a brand.' }),
   osVersion: z.string().min(2, { message: 'OS version is required.' }),
   issueDescription: z.string().min(20, { message: 'Please provide a detailed description of at least 20 characters.' }),
   errorMessages: z.string().optional(),
@@ -48,11 +55,21 @@ export function ServiceRequestForm() {
     defaultValues: {
       customerName: '',
       customerEmail: '',
+      brand: '',
       osVersion: '',
       issueDescription: '',
       errorMessages: '',
     },
   });
+
+  const deviceType = form.watch('deviceType');
+  const brands = deviceType ? deviceBrands[deviceType] : [];
+
+  useEffect(() => {
+    if (deviceType) {
+      form.resetField('brand', { defaultValue: '' });
+    }
+  }, [deviceType, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -134,18 +151,41 @@ export function ServiceRequestForm() {
             />
             <FormField
               control={form.control}
-              name="osVersion"
+              name="brand"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Operating System & Version</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Windows 11, macOS Sonoma, N/A" {...field} />
-                  </FormControl>
+                  <FormLabel>Brand</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value || ''} disabled={!deviceType}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={deviceType ? "Select a brand" : "Select a device type first"} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="osVersion"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Operating System & Version</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., Windows 11, macOS Sonoma, N/A" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}

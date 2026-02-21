@@ -6,6 +6,7 @@ const formSchema = z.object({
   customerName: z.string().min(2),
   customerEmail: z.string().email(),
   deviceType: z.enum(['Laptop', 'Desktop', 'Printer']),
+  brand: z.string().min(1, { message: 'Please select a brand.' }),
   osVersion: z.string().min(2),
   issueDescription: z.string().min(20),
   errorMessages: z.string().optional(),
