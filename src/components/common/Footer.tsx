@@ -10,7 +10,7 @@ export function Footer() {
           <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
             <Logo />
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} TechFlow Inc. All rights reserved.
+              &copy; {new Date().getFullYear()} Pc Point. All rights reserved.
             </p>
           </div>
           <div className="flex items-center gap-4">

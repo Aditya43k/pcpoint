@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'TechFlow',
+  title: 'Pc Point',
   description: 'Your one-stop solution for computer and laptop services.',
 };
 

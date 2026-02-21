@@ -6,7 +6,7 @@ export function Logo() {
     <Link href="/" className="flex items-center gap-2" prefetch={false}>
       <Cpu className="h-7 w-7 text-primary" />
       <span className="text-xl font-bold tracking-tight text-foreground">
-        TechFlow
+        Pc Point
       </span>
     </Link>
   );
