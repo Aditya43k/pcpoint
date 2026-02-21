@@ -24,7 +24,7 @@ export function Hero() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
             Expert Tech Support, Streamlined.
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-primary-foreground/80 md:text-xl">
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-white md:text-xl">
             Specialized in PC, laptop, and printer repairs. From hardware replacements to system upgrades, we provide fast, reliable, and transparent services.
           </p>
           <div className="mt-8 flex justify-center gap-4">

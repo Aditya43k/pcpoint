@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-image",
-      "description": "A modern, clean desk with a laptop, keyboard, and other tech gadgets.",
-      "imageUrl": "https://images.unsplash.com/photo-1718220216044-006f43e3a9b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjB3b3Jrc3BhY2V8ZW58MHx8fHwxNzcxNTA4NjU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "modern workspace"
+      "description": "A technician repairing a laptop on a workbench with tools.",
+      "imageUrl": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "tech repair"
     },
     {
       "id": "feature-fast-triage",
