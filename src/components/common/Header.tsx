@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/common/Logo';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 
 export function Header() {
@@ -27,6 +27,9 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="pr-0">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Main Menu</SheetTitle>
+                </SheetHeader>
                 <Logo className="mb-6" />
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
