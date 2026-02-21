@@ -7,7 +7,7 @@ export function Hero() {
   const heroImage = PlaceHolderImages.find(p => p.id === "hero-image");
 
   return (
-    <section className="relative h-[60vh] min-h-[400px] w-full">
+    <section className="relative h-[70vh] min-h-[500px] w-full sm:h-[60vh] sm:min-h-[400px]">
       {heroImage && (
         <Image
           src={heroImage.imageUrl}
@@ -18,20 +18,20 @@ export function Hero() {
           priority
         />
       )}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white">
         <div className="container px-4">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl font-headline">
             Expert Tech Support, Streamlined.
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-white md:text-xl">
+          <p className="mt-4 max-w-3xl mx-auto text-base text-white/90 sm:text-lg md:text-xl">
             Specialized in PC, laptop, and printer repairs. From hardware replacements to system upgrades, we provide fast, reliable, and transparent services.
           </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
               <Link href="/request">Submit a Service Request</Link>
             </Button>
-            <Button asChild size="lg" variant="secondary">
+            <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
               <Link href="/#features">Learn More</Link>
             </Button>
           </div>

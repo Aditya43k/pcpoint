@@ -31,7 +31,7 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl font-headline">Admin Login</CardTitle>
+        <CardTitle className="text-xl sm:text-2xl font-headline">Admin Login</CardTitle>
         <CardDescription>
           Enter your credentials to access the dashboard.
         </CardDescription>

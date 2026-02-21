@@ -36,13 +36,13 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="py-16 sm:py-24 bg-background">
+    <section id="features" className="py-16 sm:py-20 bg-background">
       <div className="container px-4">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight font-headline sm:text-4xl">
             Our Services
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+          <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground">
             We specialize in keeping your essential tech running perfectly, from hardware to software.
           </p>
         </div>
