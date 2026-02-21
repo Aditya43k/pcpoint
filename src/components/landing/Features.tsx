@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Wrench, Rocket, Printer } from "lucide-react";
+import { Wrench, Rocket, Printer, HardDrive, ShieldCheck, DatabaseBackup } from "lucide-react";
 
 const features = [
   {
@@ -17,6 +17,21 @@ const features = [
     title: "Printer Services",
     description: "Expert repairs and replacement services for all major printer brands to get you back to printing smoothly.",
   },
+  {
+    icon: <HardDrive className="h-8 w-8 text-primary" />,
+    title: "OS Installation",
+    description: "Fresh installations and upgrades for Windows, macOS, and Linux to optimize performance and security.",
+  },
+  {
+    icon: <ShieldCheck className="h-8 w-8 text-primary" />,
+    title: "Anti-virus & Security",
+    description: "Protect your system from malware and viruses with top-tier security software like McAfee, NPAV, and more.",
+  },
+  {
+    icon: <DatabaseBackup className="h-8 w-8 text-primary" />,
+    title: "Data Recovery",
+    description: "Professional data recovery services to retrieve lost files from failing hard drives and other storage media.",
+  },
 ];
 
 export function Features() {
@@ -28,7 +43,7 @@ export function Features() {
             Our Services
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            We specialize in keeping your essential tech running perfectly.
+            We specialize in keeping your essential tech running perfectly, from hardware to software.
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

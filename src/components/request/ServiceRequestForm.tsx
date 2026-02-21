@@ -33,13 +33,14 @@ const deviceBrands: Record<string, string[]> = {
   Laptop: ['HP', 'Acer', 'Dell', 'Asus', 'Lenovo', 'Apple', 'MSI', 'Razer', 'Samsung', 'Microsoft', 'Other'],
   Desktop: ['Dell', 'HP', 'Apple', 'Lenovo', 'Acer', 'Custom Build', 'Other'],
   Printer: ['HP', 'Canon', 'Epson', 'Brother', 'Xerox', 'Lexmark', 'Samsung', 'Other'],
+  Software: ['OS Installation', 'Anti-virus & Security', 'Data Recovery', 'Other'],
 };
 
 const formSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   customerEmail: z.string().email({ message: 'Please enter a valid email address.' }),
-  deviceType: z.enum(['Laptop', 'Desktop', 'Printer']),
-  brand: z.string({ required_error: 'Please select a brand.' }).min(1, { message: 'Please select a brand.' }),
+  deviceType: z.enum(['Laptop', 'Desktop', 'Printer', 'Software']),
+  brand: z.string({ required_error: 'Please select an option.' }).min(1, { message: 'Please select an option.' }),
   osVersion: z.string().min(2, { message: 'OS version is required.' }),
   issueDescription: z.string().min(20, { message: 'Please provide a detailed description of at least 20 characters.' }),
   errorMessages: z.string().optional(),
@@ -64,6 +65,8 @@ export function ServiceRequestForm() {
 
   const deviceType = form.watch('deviceType');
   const brands = deviceType ? deviceBrands[deviceType] : [];
+  const brandLabel = deviceType === 'Software' ? 'Service Type' : 'Brand';
+  const brandPlaceholder = deviceType === 'Software' ? 'Select a service' : 'Select a brand';
 
   useEffect(() => {
     if (deviceType) {
@@ -132,17 +135,18 @@ export function ServiceRequestForm() {
               name="deviceType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Device Type</FormLabel>
+                  <FormLabel>Category</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a device type" />
+                        <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Laptop">Laptop</SelectItem>
                       <SelectItem value="Desktop">Desktop</SelectItem>
                       <SelectItem value="Printer">Printer</SelectItem>
+                      <SelectItem value="Software">Software</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -154,11 +158,11 @@ export function ServiceRequestForm() {
               name="brand"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Brand</FormLabel>
+                  <FormLabel>{brandLabel}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value || ''} disabled={!deviceType}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={deviceType ? "Select a brand" : "Select a device type first"} />
+                        <SelectValue placeholder={deviceType ? brandPlaceholder : "Select a category first"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -201,7 +205,7 @@ export function ServiceRequestForm() {
                   />
                 </FormControl>
                 <FormDescription>
-                  Mention if you need a replacement, general repair, or system upgrade (e.g. SSD, RAM).
+                  For hardware, mention if you need a replacement or repair. For software, specify versions or antivirus brands if applicable.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
