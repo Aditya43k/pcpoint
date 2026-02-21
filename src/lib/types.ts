@@ -2,7 +2,7 @@ export type ServiceRequest = {
   id: string;
   customerName: string;
   customerEmail: string;
-  deviceType: 'Laptop' | 'Desktop' | 'Smartphone' | 'Tablet' | 'Other';
+  deviceType: 'Laptop' | 'Desktop' | 'Printer';
   osVersion: string;
   issueDescription: string;
   errorMessages?: string;

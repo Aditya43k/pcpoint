@@ -25,7 +25,7 @@ export function Hero() {
             Expert Tech Support, Streamlined.
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-primary-foreground/80 md:text-xl">
-            From broken screens to software glitches, TechFlow provides fast, reliable, and transparent repair services for all your devices.
+            Specialized in PC, laptop, and printer repairs. From hardware replacements to system upgrades, we provide fast, reliable, and transparent services.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">

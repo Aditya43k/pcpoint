@@ -5,7 +5,7 @@ import { z } from 'zod';
 const formSchema = z.object({
   customerName: z.string().min(2),
   customerEmail: z.string().email(),
-  deviceType: z.enum(['Laptop', 'Desktop', 'Smartphone', 'Tablet', 'Other']),
+  deviceType: z.enum(['Laptop', 'Desktop', 'Printer']),
   osVersion: z.string().min(2),
   issueDescription: z.string().min(20),
   errorMessages: z.string().optional(),

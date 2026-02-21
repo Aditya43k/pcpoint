@@ -32,7 +32,7 @@ import { Loader2 } from 'lucide-react';
 const formSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   customerEmail: z.string().email({ message: 'Please enter a valid email address.' }),
-  deviceType: z.enum(['Laptop', 'Desktop', 'Smartphone', 'Tablet', 'Other']),
+  deviceType: z.enum(['Laptop', 'Desktop', 'Printer']),
   osVersion: z.string().min(2, { message: 'OS version is required.' }),
   issueDescription: z.string().min(20, { message: 'Please provide a detailed description of at least 20 characters.' }),
   errorMessages: z.string().optional(),
@@ -125,9 +125,7 @@ export function ServiceRequestForm() {
                     <SelectContent>
                       <SelectItem value="Laptop">Laptop</SelectItem>
                       <SelectItem value="Desktop">Desktop</SelectItem>
-                      <SelectItem value="Smartphone">Smartphone</SelectItem>
-                      <SelectItem value="Tablet">Tablet</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="Printer">Printer</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -141,7 +139,7 @@ export function ServiceRequestForm() {
                 <FormItem>
                   <FormLabel>Operating System & Version</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Windows 11, macOS Sonoma" {...field} />
+                    <Input placeholder="e.g., Windows 11, macOS Sonoma, N/A" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,6 +160,9 @@ export function ServiceRequestForm() {
                     {...field}
                   />
                 </FormControl>
+                <FormDescription>
+                  Mention if you need a replacement, general repair, or system upgrade (e.g. SSD, RAM).
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

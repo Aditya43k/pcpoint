@@ -71,7 +71,7 @@ export const mockServiceRequests: ServiceRequest[] = [
     id: 'SR-004',
     customerName: 'Mary Davis',
     customerEmail: 'mary.davis@example.com',
-    deviceType: 'Other',
+    deviceType: 'Printer',
     osVersion: 'N/A',
     issueDescription: 'My printer is not connecting to the network. It\'s a BrandX Pro-500 model.',
     status: 'Completed',

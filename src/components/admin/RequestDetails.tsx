@@ -2,7 +2,7 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Smartphone, Monitor, Tablet, HelpCircle, Server, MessageSquare, AlertCircle } from 'lucide-react';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle } from 'lucide-react';
 import { TechnicianAssignment } from './TechnicianAssignment';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -14,10 +14,7 @@ type RequestDetailsProps = {
 const deviceIcons = {
   Laptop: <Laptop className="h-5 w-5 text-muted-foreground" />,
   Desktop: <Monitor className="h-5 w-5 text-muted-foreground" />,
-  Smartphone: <Smartphone className="h-5 w-5 text-muted-foreground" />,
-  Tablet: <Tablet className="h-5 w-5 text-muted-foreground" />,
-  Server: <Server className="h-5 w-5 text-muted-foreground" />,
-  Other: <HelpCircle className="h-5 w-5 text-muted-foreground" />,
+  Printer: <Printer className="h-5 w-5 text-muted-foreground" />,
 };
 
 export function RequestDetails({ request }: RequestDetailsProps) {
@@ -60,7 +57,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Device Information</h3>
             <div className="flex items-center gap-3">
-              {deviceIcons[request.deviceType] || deviceIcons.Other} <span>{request.deviceType}</span>
+              {deviceIcons[request.deviceType] || <HelpCircle className="h-5 w-5 text-muted-foreground" />} <span>{request.deviceType}</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs bg-muted p-1 rounded">OS</span>

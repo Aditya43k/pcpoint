@@ -1,21 +1,21 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Wrench, ShieldCheck, Clock } from "lucide-react";
+import { Wrench, Rocket, Printer } from "lucide-react";
 
 const features = [
   {
     icon: <Wrench className="h-8 w-8 text-primary" />,
-    title: "Comprehensive Repairs",
-    description: "We handle everything from hardware failures to complex software issues on laptops, desktops, and more.",
+    title: "PC & Laptop Repairs",
+    description: "We handle everything from hardware failures to complex software issues on laptops and desktops, including component replacement.",
   },
   {
-    icon: <ShieldCheck className="h-8 w-8 text-primary" />,
-    title: "Expert Technicians",
-    description: "Our certified technicians have the expertise to diagnose and resolve your tech problems efficiently and effectively.",
+    icon: <Rocket className="h-8 w-8 text-primary" />,
+    title: "System Upgrades",
+    description: "Boost your PC or laptop's performance with SSD installation, RAM upgrades, and other component enhancements.",
   },
   {
-    icon: <Clock className="h-8 w-8 text-primary" />,
-    title: "Real-time Progress Updates",
-    description: "Stay informed with live updates on your service request, from diagnosis to completion.",
+    icon: <Printer className="h-8 w-8 text-primary" />,
+    title: "Printer Services",
+    description: "Expert repairs and replacement services for all major printer brands to get you back to printing smoothly.",
   },
 ];
 
@@ -25,10 +25,10 @@ export function Features() {
       <div className="container px-4">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight font-headline sm:text-4xl">
-            Why Choose TechFlow?
+            Our Services
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            We've built our service around efficiency, expertise, and transparency.
+            We specialize in keeping your essential tech running perfectly.
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
