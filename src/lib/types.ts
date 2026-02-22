@@ -1,5 +1,6 @@
 export type ServiceRequest = {
   id: string;
+  userId: string;
   customerName: string;
   customerEmail: string;
   deviceType: 'Laptop' | 'Desktop' | 'Printer' | 'Software';

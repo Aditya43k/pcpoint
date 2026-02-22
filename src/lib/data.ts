@@ -30,6 +30,7 @@ export const mockTechnicians: Technician[] = [
 export const mockServiceRequests: ServiceRequest[] = [
   {
     id: 'SR-001',
+    userId: 'mock-user-1',
     customerName: 'John Doe',
     customerEmail: 'john.doe@example.com',
     deviceType: 'Laptop',
@@ -42,6 +43,7 @@ export const mockServiceRequests: ServiceRequest[] = [
   },
   {
     id: 'SR-002',
+    userId: 'mock-user-2',
     customerName: 'Jane Smith',
     customerEmail: 'jane.smith@example.com',
     deviceType: 'Desktop',
@@ -58,6 +60,7 @@ export const mockServiceRequests: ServiceRequest[] = [
   },
   {
     id: 'SR-003',
+    userId: 'mock-user-3',
     customerName: 'Peter Jones',
     customerEmail: 'peter.jones@example.com',
     deviceType: 'Laptop',
@@ -72,6 +75,7 @@ export const mockServiceRequests: ServiceRequest[] = [
   },
   {
     id: 'SR-004',
+    userId: 'mock-user-4',
     customerName: 'Mary Davis',
     customerEmail: 'mary.davis@example.com',
     deviceType: 'Printer',

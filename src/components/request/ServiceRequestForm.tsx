@@ -23,11 +23,11 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { CardContent, CardFooter } from '@/components/ui/card';
-import { submitServiceRequest } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useFirestore, useUser, setServiceRequest } from '@/firebase';
 
 const deviceBrands: Record<string, string[]> = {
   Laptop: ['HP', 'Acer', 'Dell', 'Asus', 'Lenovo', 'Apple', 'MSI', 'Razer', 'Samsung', 'Microsoft', 'Other'],
@@ -52,18 +52,30 @@ export function ServiceRequestForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useUser();
+  const firestore = useFirestore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      customerName: '',
-      customerEmail: '',
+      customerName: user?.displayName || '',
+      customerEmail: user?.email || '',
       brand: '',
       osVersion: '',
       issueDescription: '',
       errorMessages: '',
     },
   });
+
+  useEffect(() => {
+    if (user) {
+        form.reset({
+            customerName: user.displayName || '',
+            customerEmail: user.email || '',
+        });
+    }
+  }, [user, form]);
+
 
   const deviceType = form.watch('deviceType');
   const brand = form.watch('brand');
@@ -80,32 +92,41 @@ export function ServiceRequestForm() {
   }, [deviceType, form]);
 
   useEffect(() => {
-    // When brand (service type) changes for software, reset the osVersion field
-    // as it might be holding an antivirus brand, and the new service might need an OS version.
     if (deviceType === 'Software') {
       form.resetField('osVersion', { defaultValue: '' });
     }
   }, [brand, deviceType, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    const result = await submitServiceRequest(values);
-    setIsSubmitting(false);
+    if (!user || !firestore) {
+      toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to submit a request.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    if (result.success) {
+    setIsSubmitting(true);
+    try {
+      const requestData = setServiceRequest(firestore, user.uid, values);
+      
       toast({
         title: 'Request Submitted!',
-        description: `Your service request ID is ${result.requestId}. We will be in touch shortly.`,
+        description: `Your service request ID is ${requestData.id}. We will be in touch shortly.`,
         variant: 'default',
         className: 'bg-accent text-accent-foreground'
       });
       router.push('/');
-    } else {
-      toast({
+
+    } catch (error) {
+       toast({
         title: 'Submission Failed',
         description: 'There was an error submitting your request. Please try again.',
         variant: 'destructive',
       });
+    } finally {
+        setIsSubmitting(false);
     }
   }
 
@@ -134,7 +155,7 @@ export function ServiceRequestForm() {
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="you@example.com" {...field} />
+                    <Input placeholder="you@example.com" {...field} readOnly disabled />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
