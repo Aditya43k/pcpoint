@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import { useFirestore, useUser } from '@/firebase';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import type { ServiceRequest } from '@/lib/types';
-import { collection, query, where, orderBy } from 'firebase/firestore';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { collection, query, where } from 'firebase/firestore';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
@@ -20,14 +20,21 @@ export function UserRequests() {
 
   const userRequestsQuery = useMemo(() => {
     if (!firestore || !user) return null;
+    // The orderBy clause was removed to prevent a Firestore index error.
+    // Sorting is now handled on the client-side.
     return query(
       collection(firestore, 'serviceRequests'),
-      where('userId', '==', user.uid),
-      orderBy('submittedAt', 'desc')
+      where('userId', '==', user.uid)
     );
   }, [firestore, user]);
 
-  const { data: requests, isLoading, error } = useCollection<ServiceRequest>(userRequestsQuery);
+  const { data: unsortedRequests, isLoading, error } = useCollection<ServiceRequest>(userRequestsQuery);
+
+  const requests = useMemo(() => {
+    if (!unsortedRequests) return null;
+    // Sort requests by submission date in descending order on the client
+    return [...unsortedRequests].sort((a, b) => b.submittedAt.toMillis() - a.submittedAt.toMillis());
+  }, [unsortedRequests]);
 
   const getStatusVariant = (status: ServiceRequest['status']) => {
     switch (status) {
