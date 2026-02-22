@@ -84,16 +84,16 @@ export function Header() {
                           {link.label}
                         </Link>
                       ))}
+                       <hr className="my-2"/>
+                       <Link
+                          key={adminLink.href}
+                          href={adminLink.href}
+                          className="text-foreground/70 transition-colors hover:text-foreground"
+                        >
+                          {adminLink.label}
+                        </Link>
                     </>
                   )}
-                   <hr className="my-2"/>
-                   <Link
-                      key={adminLink.href}
-                      href={adminLink.href}
-                      className="text-foreground/70 transition-colors hover:text-foreground"
-                    >
-                      {adminLink.label}
-                    </Link>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -127,12 +127,12 @@ export function Header() {
                     <Button asChild>
                         <Link href="/signup">Sign Up</Link>
                     </Button>
+                     <div className="h-6 w-px bg-border mx-2"></div>
+                     <Button asChild variant="outline">
+                        <Link href={adminLink.href}>{adminLink.label}</Link>
+                     </Button>
                 </>
             ) : null}
-             <div className="h-6 w-px bg-border mx-2"></div>
-             <Button asChild variant="outline">
-                <Link href={adminLink.href}>{adminLink.label}</Link>
-             </Button>
           </div>
         </div>
       </div>
