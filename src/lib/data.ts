@@ -1,4 +1,4 @@
-import type { ServiceRequest, Technician } from './types';
+import type { Technician } from './types';
 
 export const mockTechnicians: Technician[] = [
   {
@@ -24,68 +24,5 @@ export const mockTechnicians: Technician[] = [
     name: 'Diana Miller',
     expertise: ['Software', 'macOS', 'Peripheral Repair', 'Printer Repair'],
     currentWorkload: 1,
-  },
-];
-
-export const mockServiceRequests: ServiceRequest[] = [
-  {
-    id: 'SR-001',
-    userId: 'mock-user-1',
-    customerName: 'John Doe',
-    customerEmail: 'john.doe@example.com',
-    deviceType: 'Laptop',
-    brand: 'Dell',
-    osVersion: 'Windows 11',
-    issueDescription: 'Laptop screen is flickering and showing strange colors. It seems to be a hardware issue with the display panel.',
-    status: 'Pending',
-    submittedAt: new Date('2024-07-20T09:00:00Z').toISOString(),
-    updatedAt: new Date('2024-07-20T09:00:00Z').toISOString(),
-  },
-  {
-    id: 'SR-002',
-    userId: 'mock-user-2',
-    customerName: 'Jane Smith',
-    customerEmail: 'jane.smith@example.com',
-    deviceType: 'Desktop',
-    brand: 'Apple',
-    osVersion: 'macOS Sonoma',
-    issueDescription: 'My computer is running extremely slow and frequently crashes. I suspect a virus or malware infection.',
-    errorMessages: 'Kernel Panic report generated on crash.',
-    status: 'In Progress',
-    technicianId: 'tech-002',
-    submittedAt: new Date('2024-07-19T14:30:00Z').toISOString(),
-    updatedAt: new Date('2024-07-20T11:00:00Z').toISOString(),
-    technicianNotes: 'Initial diagnostics complete. Running full system scan for malware.',
-    estimatedCompletion: new Date('2024-07-21T17:00:00Z').toISOString(),
-  },
-  {
-    id: 'SR-003',
-    userId: 'mock-user-3',
-    customerName: 'Peter Jones',
-    customerEmail: 'peter.jones@example.com',
-    deviceType: 'Laptop',
-    brand: 'HP',
-    osVersion: 'Ubuntu 22.04',
-    issueDescription: 'The battery is not charging. I have tried multiple chargers, so the issue might be with the battery or the charging port itself.',
-    status: 'Awaiting Parts',
-    technicianId: 'tech-001',
-    submittedAt: new Date('2024-07-18T11:00:00Z').toISOString(),
-    updatedAt: new Date('2024-07-19T16:45:00Z').toISOString(),
-    technicianNotes: 'Charging port confirmed to be faulty. Replacement part has been ordered.',
-  },
-  {
-    id: 'SR-004',
-    userId: 'mock-user-4',
-    customerName: 'Mary Davis',
-    customerEmail: 'mary.davis@example.com',
-    deviceType: 'Printer',
-    brand: 'Brother',
-    osVersion: 'N/A',
-    issueDescription: 'My printer is not connecting to the network. It\'s a BrandX Pro-500 model.',
-    status: 'Completed',
-    technicianId: 'tech-004',
-    submittedAt: new Date('2024-07-17T10:00:00Z').toISOString(),
-    updatedAt: new Date('2024-07-18T12:00:00Z').toISOString(),
-    technicianNotes: 'Reset network settings on printer and reconfigured WiFi connection. Issue resolved.',
   },
 ];

@@ -37,8 +37,8 @@ export function RequestDetails({ request }: RequestDetailsProps) {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="font-headline text-2xl">Request {request.id}</CardTitle>
-            <CardDescription>Submitted on {format(new Date(request.submittedAt), 'PPP')}</CardDescription>
+            <CardTitle className="font-headline text-2xl">Request {request.id.substring(0, 8)}</CardTitle>
+            <CardDescription>Submitted on {format(request.submittedAt.toDate(), 'PPP')}</CardDescription>
           </div>
           <Badge className="flex items-center gap-2" variant="outline">
             <span className={cn("h-2 w-2 rounded-full", getStatusClass(request.status))}></span>

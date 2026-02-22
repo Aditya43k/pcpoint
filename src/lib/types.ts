@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 export type ServiceRequest = {
   id: string;
   userId: string;
@@ -9,11 +11,11 @@ export type ServiceRequest = {
   issueDescription: string;
   errorMessages?: string;
   status: 'Pending' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled';
-  submittedAt: string;
-  updatedAt: string;
+  submittedAt: Timestamp;
+  updatedAt: Timestamp;
   technicianId?: string;
   technicianNotes?: string;
-  estimatedCompletion?: string;
+  estimatedCompletion?: Timestamp;
 };
 
 export type Technician = {
