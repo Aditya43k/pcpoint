@@ -13,6 +13,6 @@ export function initializeFirebase(): { app: FirebaseApp; auth: Auth; firestore:
 export { FirebaseProvider, useFirebase, useFirebaseApp, useAuth, useFirestore } from './provider';
 export { FirebaseClientProvider } from './client-provider';
 export { useUser } from './auth/use-user';
-export { setServiceRequest } from './firestore';
+export { setServiceRequest, updateServiceRequestStatus } from './firestore';
 export { useCollection } from './firestore/use-collection';
 export { useDoc } from './firestore/use-doc';

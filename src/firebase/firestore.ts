@@ -1,7 +1,8 @@
 'use client';
-import { doc, setDoc, Firestore, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, Firestore, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { errorEmitter } from './error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from './errors';
+import type { ServiceRequest } from '@/lib/types';
 
 export function setServiceRequest(db: Firestore, userId: string, data: any) {
   const docRef = doc(collection(db, 'serviceRequests'));
@@ -16,11 +17,15 @@ export function setServiceRequest(db: Firestore, userId: string, data: any) {
 
   // Using serverTimestamp causes issues with client-side rendering before data is synced
   // so we use a client-side timestamp for now.
-  const firestoreData = { ...requestData };
-  delete (firestoreData as any).submittedAt;
-  delete (firestoreData as any).updatedAt;
+  const firestoreData: any = { ...requestData };
+  delete firestoreData.submittedAt;
+  delete firestoreData.updatedAt;
   firestoreData.submittedAt = serverTimestamp();
   firestoreData.updatedAt = serverTimestamp();
+
+  if (data.appointmentDate) {
+    firestoreData.appointmentDate = data.appointmentDate;
+  }
 
 
   setDoc(docRef, firestoreData)
@@ -36,4 +41,24 @@ export function setServiceRequest(db: Firestore, userId: string, data: any) {
     });
 
     return requestData; // return the client-side version of the data immediately
+}
+
+export function updateServiceRequestStatus(db: Firestore, requestId: string, status: ServiceRequest['status']) {
+    const docRef = doc(db, 'serviceRequests', requestId);
+    const updateData = {
+        status,
+        updatedAt: serverTimestamp(),
+    };
+
+    return updateDoc(docRef, updateData)
+        .catch(async (serverError) => {
+            console.error("Firestore error:", serverError);
+            const permissionError = new FirestorePermissionError({
+                path: docRef.path,
+                operation: 'update',
+                requestResourceData: updateData,
+            } satisfies SecurityRuleContext);
+            errorEmitter.emit('permission-error', permissionError);
+            throw permissionError;
+        });
 }

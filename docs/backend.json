@@ -54,13 +54,17 @@
         },
         "status": {
             "type": "string",
-            "enum": ["Pending", "In Progress", "Awaiting Parts", "Completed", "Cancelled"]
+            "enum": ["Pending", "Scheduled", "Declined", "In Progress", "Awaiting Parts", "Completed", "Cancelled"]
         },
         "submittedAt": {
             "type": "string",
             "format": "date-time"
         },
         "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "appointmentDate": {
             "type": "string",
             "format": "date-time"
         }

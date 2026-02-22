@@ -2,10 +2,15 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck } from 'lucide-react';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { TechnicianAssignment } from './TechnicianAssignment';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useFirestore, updateServiceRequestStatus } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type RequestDetailsProps = {
   request: ServiceRequest;
@@ -19,6 +24,10 @@ const deviceIcons = {
 };
 
 export function RequestDetails({ request }: RequestDetailsProps) {
+  const firestore = useFirestore();
+  const { toast } = useToast();
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const getStatusClass = (status: ServiceRequest['status']) => {
     switch (status) {
       case 'Pending': return 'bg-yellow-500';
@@ -26,11 +35,33 @@ export function RequestDetails({ request }: RequestDetailsProps) {
       case 'Completed': return 'bg-green-500';
       case 'Cancelled': return 'bg-red-500';
       case 'Awaiting Parts': return 'bg-orange-500';
+      case 'Scheduled': return 'bg-green-500';
+      case 'Declined': return 'bg-red-500';
       default: return 'bg-gray-500';
     }
   };
   
   const isAntivirusRequest = request.deviceType === 'Software' && request.brand === 'Anti-virus & Security';
+
+  const handleStatusUpdate = async (newStatus: ServiceRequest['status']) => {
+    if (!firestore) return;
+    setIsUpdating(true);
+    try {
+        await updateServiceRequestStatus(firestore, request.id, newStatus);
+        toast({
+            title: 'Request Updated',
+            description: `Request status changed to "${newStatus}".`,
+        });
+    } catch (error) {
+        toast({
+            variant: 'destructive',
+            title: 'Update Failed',
+            description: 'Could not update the request status. Please try again.',
+        });
+    } finally {
+        setIsUpdating(false);
+    }
+  };
 
   return (
     <Card className="shadow-md">
@@ -47,6 +78,35 @@ export function RequestDetails({ request }: RequestDetailsProps) {
         </div>
       </CardHeader>
       <CardContent className="grid gap-6">
+        {request.appointmentDate && (
+            <>
+                <div>
+                    <h3 className="font-semibold text-lg mb-2">Booking Request</h3>
+                    <Alert>
+                        <CalendarDays className="h-4 w-4" />
+                        <AlertTitle>Requested Appointment: {format(request.appointmentDate.toDate(), 'PPP')}</AlertTitle>
+                        {request.status === 'Pending' && (
+                            <AlertDescription className="mt-4 flex gap-2">
+                                <Button size="sm" onClick={() => handleStatusUpdate('Scheduled')} disabled={isUpdating}>
+                                    {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
+                                    Accept
+                                </Button>
+                                <Button size="sm" variant="destructive" onClick={() => handleStatusUpdate('Declined')} disabled={isUpdating}>
+                                    {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <XCircle className="mr-2 h-4 w-4" />}
+                                    Decline
+                                </Button>
+                            </AlertDescription>
+                        )}
+                         {(request.status === 'Scheduled' || request.status === 'Declined') && (
+                             <AlertDescription className="mt-2 text-sm">
+                                This booking request has been <span className="font-semibold">{request.status.toLowerCase()}</span>.
+                             </AlertDescription>
+                         )}
+                    </Alert>
+                </div>
+                <Separator />
+            </>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Customer Information</h3>

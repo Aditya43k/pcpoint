@@ -10,12 +10,13 @@ export type ServiceRequest = {
   osVersion: string;
   issueDescription: string;
   errorMessages?: string;
-  status: 'Pending' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'Scheduled' | 'Declined' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled';
   submittedAt: Timestamp;
   updatedAt: Timestamp;
   technicianId?: string;
   technicianNotes?: string;
   estimatedCompletion?: Timestamp;
+  appointmentDate?: Timestamp;
 };
 
 export type Technician = {

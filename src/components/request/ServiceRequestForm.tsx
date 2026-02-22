@@ -26,8 +26,12 @@ import { CardContent, CardFooter } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CalendarIcon } from 'lucide-react';
 import { useFirestore, useUser, setServiceRequest } from '@/firebase';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 const deviceBrands: Record<string, string[]> = {
   Laptop: ['HP', 'Acer', 'Dell', 'Asus', 'Lenovo', 'Apple', 'MSI', 'Razer', 'Samsung', 'Microsoft', 'Other'],
@@ -46,6 +50,7 @@ const formSchema = z.object({
   osVersion: z.string().min(2, { message: 'This field is required.' }),
   issueDescription: z.string().min(20, { message: 'Please provide a detailed description of at least 20 characters.' }),
   errorMessages: z.string().optional(),
+  appointmentDate: z.date().optional(),
 });
 
 export function ServiceRequestForm() {
@@ -291,6 +296,51 @@ export function ServiceRequestForm() {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="appointmentDate"
+            render={({ field }) => (
+                <FormItem className="flex flex-col">
+                <FormLabel>Preferred Appointment Date (Optional)</FormLabel>
+                <Popover>
+                    <PopoverTrigger asChild>
+                    <FormControl>
+                        <Button
+                        variant={'outline'}
+                        className={cn(
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                        )}
+                        >
+                        {field.value ? (
+                            format(field.value, 'PPP')
+                        ) : (
+                            <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                        date < new Date(new Date().setDate(new Date().getDate() - 1))
+                        }
+                        initialFocus
+                    />
+                    </PopoverContent>
+                </Popover>
+                <FormDescription>
+                    Choose a convenient date for your on-site service or drop-off.
+                </FormDescription>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
         </CardContent>
         <CardFooter>
           <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" disabled={isSubmitting}>
