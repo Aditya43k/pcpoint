@@ -20,10 +20,16 @@ export function Header() {
     router.push('/');
   };
 
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/request', label: 'New Request' },
-  ];
+  const activeNavLinks = user
+    ? [
+        { href: '/', label: 'Home' },
+        { href: '/dashboard', label: 'My Dashboard' },
+        { href: '/request', label: 'New Request' },
+      ]
+    : [
+        { href: '/', label: 'Home' },
+        { href: '/request', label: 'New Request' },
+      ];
 
   const guestLinks = [
     { href: '/customer-login', label: 'Customer Login' },
@@ -53,7 +59,7 @@ export function Header() {
                 </SheetHeader>
                 <Logo className="mb-6" />
                 <nav className="flex flex-col space-y-4">
-                  {navLinks.map((link) => (
+                  {activeNavLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
@@ -93,7 +99,7 @@ export function Header() {
             </Sheet>
           </div>
           <nav className="hidden md:flex md:items-center md:gap-4 lg:gap-6">
-            {navLinks.map((link) => (
+            {activeNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
