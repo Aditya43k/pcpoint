@@ -18,6 +18,8 @@ export function LoginForm() {
     e.preventDefault();
 
     if (email === 'pcpoint@gmail.com' && password === 'pc@4347') {
+      // Set a session flag to indicate admin is logged in
+      sessionStorage.setItem('isAdminLoggedIn', 'true');
       router.push('/admin');
     } else {
       toast({
