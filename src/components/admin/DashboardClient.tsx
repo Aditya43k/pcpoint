@@ -42,6 +42,7 @@ export function DashboardClient() {
       case 'In Progress':
         return 'secondary';
       case 'Completed':
+      case 'Paid':
         return 'outline';
       case 'Cancelled':
         return 'destructive';

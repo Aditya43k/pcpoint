@@ -44,6 +44,7 @@ export function UserRequests() {
       case 'In Progress':
         return 'secondary';
       case 'Completed':
+      case 'Paid':
         return 'outline';
       case 'Cancelled':
       case 'Declined':

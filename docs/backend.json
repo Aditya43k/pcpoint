@@ -54,7 +54,7 @@
         },
         "status": {
             "type": "string",
-            "enum": ["Pending", "Scheduled", "Declined", "In Progress", "Awaiting Parts", "Completed", "Cancelled"]
+            "enum": ["Pending", "Scheduled", "Declined", "In Progress", "Awaiting Parts", "Completed", "Cancelled", "Paid"]
         },
         "submittedAt": {
             "type": "string",

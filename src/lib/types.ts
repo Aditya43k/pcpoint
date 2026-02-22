@@ -10,7 +10,7 @@ export type ServiceRequest = {
   osVersion: string;
   issueDescription: string;
   errorMessages?: string;
-  status: 'Pending' | 'Scheduled' | 'Declined' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'Scheduled' | 'Declined' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled' | 'Paid';
   submittedAt: Timestamp;
   updatedAt: Timestamp;
   estimatedCompletion?: Timestamp;
