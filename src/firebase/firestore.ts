@@ -62,3 +62,27 @@ export function updateServiceRequestStatus(db: Firestore, requestId: string, sta
             throw permissionError;
         });
 }
+
+export function completeServiceRequest(db: Firestore, requestId: string, details: { cost: number; invoiceNotes?: string }) {
+    const docRef = doc(db, 'serviceRequests', requestId);
+    const updateData: { [key: string]: any } = {
+        status: 'Completed',
+        cost: details.cost,
+        updatedAt: serverTimestamp(),
+    };
+    if (details.invoiceNotes) {
+        updateData.invoiceNotes = details.invoiceNotes;
+    }
+
+    return updateDoc(docRef, updateData)
+        .catch(async (serverError) => {
+            console.error("Firestore error:", serverError);
+            const permissionError = new FirestorePermissionError({
+                path: docRef.path,
+                operation: 'update',
+                requestResourceData: updateData,
+            } satisfies SecurityRuleContext);
+            errorEmitter.emit('permission-error', permissionError);
+            throw permissionError;
+        });
+}

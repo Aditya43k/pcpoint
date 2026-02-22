@@ -2,14 +2,21 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2, Briefcase, PartyPopper, Ban } from 'lucide-react';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2, Briefcase, PartyPopper, Ban, DollarSign, FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useFirestore, updateServiceRequestStatus } from '@/firebase';
+import { useFirestore, updateServiceRequestStatus, completeServiceRequest } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 type RequestDetailsProps = {
   request: ServiceRequest;
@@ -22,10 +29,27 @@ const deviceIcons = {
   Software: <Settings2 className="h-5 w-5 text-muted-foreground" />,
 };
 
+const completeRequestSchema = z.object({
+  cost: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().positive({ message: 'Cost must be a positive number.' })
+  ),
+  invoiceNotes: z.string().optional(),
+});
+
 export function RequestDetails({ request }: RequestDetailsProps) {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [updatingStatus, setUpdatingStatus] = useState<ServiceRequest['status'] | null>(null);
+  const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
+
+  const completeForm = useForm<z.infer<typeof completeRequestSchema>>({
+    resolver: zodResolver(completeRequestSchema),
+    defaultValues: {
+      cost: 0.00,
+      invoiceNotes: '',
+    },
+  });
 
   const getStatusClass = (status: ServiceRequest['status']) => {
     switch (status) {
@@ -56,6 +80,31 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             variant: 'destructive',
             title: 'Update Failed',
             description: 'Could not update the request status. Please try again.',
+        });
+    } finally {
+        setUpdatingStatus(null);
+    }
+  };
+
+  const handleCompleteRequest = async (values: z.infer<typeof completeRequestSchema>) => {
+    if (!firestore) return;
+    setUpdatingStatus('Completed');
+    try {
+        await completeServiceRequest(firestore, request.id, {
+            cost: values.cost,
+            invoiceNotes: values.invoiceNotes,
+        });
+        toast({
+            title: 'Request Completed',
+            description: 'Request has been marked as completed and billed.',
+        });
+        setIsCompleteDialogOpen(false);
+        completeForm.reset();
+    } catch (error) {
+        toast({
+            variant: 'destructive',
+            title: 'Update Failed',
+            description: 'Could not complete the request. Please try again.',
         });
     } finally {
         setUpdatingStatus(null);
@@ -113,10 +162,60 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                     {updatingStatus === 'In Progress' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Briefcase className="mr-2 h-4 w-4" />}
                     In Progress
                 </Button>
-                <Button size="sm" onClick={() => handleStatusUpdate('Completed')} disabled={!!updatingStatus || ['Completed', 'Cancelled'].includes(request.status)} className="bg-green-600 hover:bg-green-700 text-white">
-                    {updatingStatus === 'Completed' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PartyPopper className="mr-2 h-4 w-4" />}
-                    Completed
-                </Button>
+                
+                <Dialog open={isCompleteDialogOpen} onOpenChange={setIsCompleteDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button size="sm" disabled={!!updatingStatus || ['Completed', 'Cancelled'].includes(request.status)} className="bg-green-600 hover:bg-green-700 text-white">
+                            <PartyPopper className="mr-2 h-4 w-4" />
+                            Completed
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Complete Service &amp; Generate Bill</DialogTitle>
+                            <DialogDescription>
+                                Enter the final cost and any billing notes for request {request.id.substring(0, 8)}.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <Form {...completeForm}>
+                            <form onSubmit={completeForm.handleSubmit(handleCompleteRequest)} className="space-y-4 py-4">
+                                <FormField
+                                    control={completeForm.control}
+                                    name="cost"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Final Cost ($)</FormLabel>
+                                            <FormControl>
+                                                <Input type="number" step="0.01" placeholder="150.00" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={completeForm.control}
+                                    name="invoiceNotes"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Billing Notes (Optional)</FormLabel>
+                                            <FormControl>
+                                                <Textarea placeholder="e.g., Replaced SSD, installed new OS." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <DialogFooter>
+                                    <Button type="submit" disabled={updatingStatus === 'Completed'}>
+                                        {updatingStatus === 'Completed' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                        Mark as Completed & Bill
+                                    </Button>
+                                </DialogFooter>
+                            </form>
+                        </Form>
+                    </DialogContent>
+                </Dialog>
+
                 <Button size="sm" variant="destructive" onClick={() => handleStatusUpdate('Cancelled')} disabled={!!updatingStatus || ['Completed', 'Cancelled'].includes(request.status)}>
                     {updatingStatus === 'Cancelled' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Ban className="mr-2 h-4 w-4" />}
                     Cancel
@@ -124,6 +223,27 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             </div>
         </div>
         <Separator />
+        {request.status === 'Completed' && request.cost != null && (
+            <>
+                <div>
+                    <h3 className="font-semibold text-lg mb-4">Billing Details</h3>
+                    <div className="space-y-4 rounded-md border p-4 bg-muted/50">
+                        <div className="flex items-center gap-3">
+                            <DollarSign className="h-5 w-5 text-muted-foreground" />
+                            <span className="font-semibold">Total Cost:</span>
+                            <span>${request.cost.toFixed(2)}</span>
+                        </div>
+                        {request.invoiceNotes && (
+                            <div className="flex gap-3">
+                                <FileText className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0"/>
+                                <p className="text-sm">{request.invoiceNotes}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <Separator />
+            </>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Customer Information</h3>

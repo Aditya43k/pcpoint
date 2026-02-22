@@ -15,4 +15,6 @@ export type ServiceRequest = {
   updatedAt: Timestamp;
   estimatedCompletion?: Timestamp;
   appointmentDate?: Timestamp;
+  cost?: number;
+  invoiceNotes?: string;
 };

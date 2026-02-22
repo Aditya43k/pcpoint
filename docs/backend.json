@@ -67,6 +67,14 @@
         "appointmentDate": {
             "type": "string",
             "format": "date-time"
+        },
+        "cost": {
+          "type": "number",
+          "description": "The final cost of the service."
+        },
+        "invoiceNotes": {
+            "type": "string",
+            "description": "Notes from the admin for the final bill."
         }
       },
       "required": ["userId", "customerName", "customerEmail", "deviceType", "brand", "issueDescription", "status", "submittedAt", "updatedAt"]
