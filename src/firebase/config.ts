@@ -1,10 +1,11 @@
 // This is a placeholder for your Firebase configuration.
 // This will be automatically replaced with your actual Firebase project configuration.
 export const firebaseConfig = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
-  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
-  appId: "REPLACE_WITH_YOUR_APP_ID"
+  apiKey: "AIzaSyBqtFHGJdh8uBkwWvxDBpb2Up4EFNMSS1g",
+  authDomain: "pcpointservice-17841.firebaseapp.com",
+  projectId: "pcpointservice-17841",
+  storageBucket: "pcpointservice-17841.appspot.com",
+  messagingSenderId: "764598181834",
+  appId: "1:764598181834:web:1d3863cf6ab4da02803933",
+  measurementId: "G-P8CV9CH8Z4"
 };
