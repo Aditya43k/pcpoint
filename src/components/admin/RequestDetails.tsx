@@ -2,7 +2,7 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2, Briefcase, PartyPopper, Ban, DollarSign, FileText } from 'lucide-react';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2, Briefcase, PartyPopper, Ban, Banknote, FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -184,9 +184,9 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                                     name="cost"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Final Cost ($)</FormLabel>
+                                            <FormLabel>Final Cost (₹)</FormLabel>
                                             <FormControl>
-                                                <Input type="number" step="0.01" placeholder="150.00" {...field} />
+                                                <Input type="number" step="0.01" placeholder="1500.00" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -229,9 +229,9 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                     <h3 className="font-semibold text-lg mb-4">Billing Details</h3>
                     <div className="space-y-4 rounded-md border p-4 bg-muted/50">
                         <div className="flex items-center gap-3">
-                            <DollarSign className="h-5 w-5 text-muted-foreground" />
+                            <Banknote className="h-5 w-5 text-muted-foreground" />
                             <span className="font-semibold">Total Cost:</span>
-                            <span>${request.cost.toFixed(2)}</span>
+                            <span>₹{request.cost.toFixed(2)}</span>
                         </div>
                         {request.invoiceNotes && (
                             <div className="flex gap-3">

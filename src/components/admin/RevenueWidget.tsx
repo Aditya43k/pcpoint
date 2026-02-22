@@ -7,7 +7,7 @@ import type { ServiceRequest } from '@/lib/types';
 import { collection, query } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '../ui/skeleton';
-import { DollarSign } from 'lucide-react';
+import { Banknote } from 'lucide-react';
 import {
   Bar,
   BarChart,
@@ -58,7 +58,7 @@ export function RevenueWidget() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <Banknote className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
                 <Skeleton className="h-8 w-1/2" />
@@ -72,10 +72,10 @@ export function RevenueWidget() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-        <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Banknote className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+        <div className="text-2xl font-bold">₹{totalRevenue.toFixed(2)}</div>
         <p className="text-xs text-muted-foreground">
           Based on all completed service requests.
         </p>
@@ -95,7 +95,7 @@ export function RevenueWidget() {
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
-                        tickFormatter={(value) => `$${value}`}
+                        tickFormatter={(value) => `₹${value}`}
                         />
                         <Tooltip
                             cursor={{ fill: 'hsl(var(--muted))' }}
@@ -117,7 +117,7 @@ export function RevenueWidget() {
                                                 Revenue
                                             </span>
                                             <span className="font-bold">
-                                                ${(payload[0].value as number).toFixed(2)}
+                                                ₹{(payload[0].value as number).toFixed(2)}
                                             </span>
                                             </div>
                                         </div>
