@@ -13,15 +13,6 @@ export type ServiceRequest = {
   status: 'Pending' | 'Scheduled' | 'Declined' | 'In Progress' | 'Awaiting Parts' | 'Completed' | 'Cancelled';
   submittedAt: Timestamp;
   updatedAt: Timestamp;
-  technicianId?: string;
-  technicianNotes?: string;
   estimatedCompletion?: Timestamp;
   appointmentDate?: Timestamp;
-};
-
-export type Technician = {
-  id: string;
-  name: string;
-  expertise: string[];
-  currentWorkload: number;
 };

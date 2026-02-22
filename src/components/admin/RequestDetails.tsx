@@ -2,8 +2,7 @@ import type { ServiceRequest } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { TechnicianAssignment } from './TechnicianAssignment';
+import { User, Mail, Laptop, Monitor, Printer, HelpCircle, MessageSquare, AlertCircle, Building, Settings2, ListChecks, ShieldCheck, CalendarDays, CheckCircle, XCircle, Loader2, Briefcase, PartyPopper, Ban } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,7 @@ const deviceIcons = {
 export function RequestDetails({ request }: RequestDetailsProps) {
   const firestore = useFirestore();
   const { toast } = useToast();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<ServiceRequest['status'] | null>(null);
 
   const getStatusClass = (status: ServiceRequest['status']) => {
     switch (status) {
@@ -45,7 +44,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
   const handleStatusUpdate = async (newStatus: ServiceRequest['status']) => {
     if (!firestore) return;
-    setIsUpdating(true);
+    setUpdatingStatus(newStatus);
     try {
         await updateServiceRequestStatus(firestore, request.id, newStatus);
         toast({
@@ -59,7 +58,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             description: 'Could not update the request status. Please try again.',
         });
     } finally {
-        setIsUpdating(false);
+        setUpdatingStatus(null);
     }
   };
 
@@ -87,12 +86,12 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                         <AlertTitle>Requested Appointment: {format(request.appointmentDate.toDate(), 'PPP')}</AlertTitle>
                         {request.status === 'Pending' && (
                             <AlertDescription className="mt-4 flex gap-2">
-                                <Button size="sm" onClick={() => handleStatusUpdate('Scheduled')} disabled={isUpdating}>
-                                    {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
+                                <Button size="sm" onClick={() => handleStatusUpdate('Scheduled')} disabled={!!updatingStatus}>
+                                    {updatingStatus === 'Scheduled' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
                                     Accept
                                 </Button>
-                                <Button size="sm" variant="destructive" onClick={() => handleStatusUpdate('Declined')} disabled={isUpdating}>
-                                    {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <XCircle className="mr-2 h-4 w-4" />}
+                                <Button size="sm" variant="destructive" onClick={() => handleStatusUpdate('Declined')} disabled={!!updatingStatus}>
+                                    {updatingStatus === 'Declined' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <XCircle className="mr-2 h-4 w-4" />}
                                     Decline
                                 </Button>
                             </AlertDescription>
@@ -107,6 +106,24 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                 <Separator />
             </>
         )}
+        <div>
+            <h3 className="font-semibold text-lg mb-4">Manage Request Status</h3>
+            <div className="flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => handleStatusUpdate('In Progress')} disabled={!!updatingStatus || ['In Progress', 'Completed', 'Cancelled'].includes(request.status)}>
+                    {updatingStatus === 'In Progress' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Briefcase className="mr-2 h-4 w-4" />}
+                    In Progress
+                </Button>
+                <Button size="sm" onClick={() => handleStatusUpdate('Completed')} disabled={!!updatingStatus || ['Completed', 'Cancelled'].includes(request.status)} className="bg-green-600 hover:bg-green-700 text-white">
+                    {updatingStatus === 'Completed' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PartyPopper className="mr-2 h-4 w-4" />}
+                    Completed
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => handleStatusUpdate('Cancelled')} disabled={!!updatingStatus || ['Completed', 'Cancelled'].includes(request.status)}>
+                    {updatingStatus === 'Cancelled' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Ban className="mr-2 h-4 w-4" />}
+                    Cancel
+                </Button>
+            </div>
+        </div>
+        <Separator />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Customer Information</h3>
@@ -158,8 +175,6 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             )}
           </div>
         </div>
-        <Separator />
-        <TechnicianAssignment request={request} />
       </CardContent>
     </Card>
   );
