@@ -24,7 +24,7 @@ export function Footer() {
             <Link href="#" aria-label="WhatsApp">
               <WhatsAppIcon className="h-6 w-6 text-muted-foreground transition-colors hover:text-foreground" />
             </Link>
-            <Link href="#" aria-label="Google Maps">
+            <Link href="https://maps.app.goo.gl/mp6S319hKZDz36Qr8" aria-label="Google Maps" target="_blank" rel="noopener noreferrer">
               <MapPin className="h-6 w-6 text-muted-foreground transition-colors hover:text-foreground" />
             </Link>
           </div>
