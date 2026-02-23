@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "source": ".",
+    "rewrites": [
+      {
+        "source": "**",
+        "apphosting": {
+          "backendId": "pcpoint-main",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}
