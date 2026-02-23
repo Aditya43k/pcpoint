@@ -202,7 +202,7 @@ export function ServiceRequestForm() {
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={deviceType ? brandPlaceholder : "Select a category first"} />
-                      </Trigger>
+                      </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {brands.map((brand) => (
