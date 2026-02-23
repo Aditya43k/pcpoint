@@ -1,13 +1,15 @@
 {
   "hosting": {
-    "source": ".",
+    "public": "out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "**",
-        "run": {
-          "serviceId": "pcpoint-main",
-          "region": "us-central1"
-        }
+        "destination": "/index.html"
       }
     ]
   }
