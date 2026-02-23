@@ -4,8 +4,8 @@
     "rewrites": [
       {
         "source": "**",
-        "apphosting": {
-          "backendId": "pcpoint-main",
+        "run": {
+          "serviceId": "pcpoint-main",
           "region": "us-central1"
         }
       }
